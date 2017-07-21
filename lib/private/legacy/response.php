@@ -104,6 +104,10 @@ class OC_Response {
 				break;
 		}
 		header($protocol.' '.$status);
+		header("Access-Control-Allow-Origin: *");
+		header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
+		header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, MKCOL, PROPFIND");
+		header("Access-Control-Allow-Credentials: true");
 	}
 
 	/**
@@ -252,7 +256,7 @@ class OC_Response {
 			. 'frame-src *; '
 			. 'img-src * data: blob:; '
 			. 'font-src \'self\' data:; '
-			. 'media-src *; ' 
+			. 'media-src *; '
 			. 'connect-src *';
 		header('Content-Security-Policy:' . $policy);
 
