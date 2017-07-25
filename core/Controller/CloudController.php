@@ -56,6 +56,14 @@ class CloudController extends OCSController {
 	}
 
 	/**
+	 * @PublicPage
+	 */
+	public function options() {
+		// for cross-domain request checks
+		return [];
+	}
+
+	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
