@@ -40,6 +40,11 @@ class CloudController extends OCSController {
 	 * @return array
 	 */
 	public function getCapabilities() {
+		header("Access-Control-Allow-Origin: *");
+		header("Access-Control-Allow-Headers: authorization, OCS-APIREQUEST, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
+		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
+		header("Access-Control-Allow-Credentials: true");
+
 		$result = [];
 		list($major, $minor, $micro) = \OCP\Util::getVersion();
 		$result['version'] = [
@@ -49,7 +54,7 @@ class CloudController extends OCSController {
 			'string' => \OC_Util::getVersionString(),
 			'edition' => \OC_Util::getEditionString(),
 		];
-			
+
 		$result['capabilities'] = \OC::$server->getCapabilitiesManager()->getCapabilities();
 
 		return ['data' => $result];
@@ -61,6 +66,11 @@ class CloudController extends OCSController {
 	 */
 	public function options() {
 		// for cross-domain request checks
+		header("Access-Control-Allow-Origin: *");
+		header("Access-Control-Allow-Headers: authorization, OCS-APIREQUEST, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
+		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
+		header("Access-Control-Allow-Credentials: true");
+
 		return ['data' => ''];
 	}
 
