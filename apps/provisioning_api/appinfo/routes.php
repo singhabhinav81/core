@@ -40,6 +40,7 @@ $users = new Users(
 	\OC::$server->getLogger(),
 	\OC::$server->getTwoFactorAuthManager()
 );
+API::register('options', '/cloud/users', [$users, 'options'], 'provisioning_api', API::GUEST_AUTH);
 API::register('get', '/cloud/users', [$users, 'getUsers'], 'provisioning_api', API::SUBADMIN_AUTH);
 API::register('post', '/cloud/users', [$users, 'addUser'], 'provisioning_api', API::SUBADMIN_AUTH);
 API::register('get', '/cloud/users/{userid}', [$users, 'getUser'], 'provisioning_api', API::USER_AUTH);
