@@ -650,6 +650,7 @@ class Server extends ServerContainer implements IServerContainer {
 			}
 			return new NoopLockingProvider();
 		});
+		$this->registerAlias('OCP\Lock\ILockingProvider', 'LockingProvider');
 		$this->registerService('MountManager', function () {
 			return new \OC\Files\Mount\Manager();
 		});
@@ -665,6 +666,7 @@ class Server extends ServerContainer implements IServerContainer {
 				$c->getDatabaseConnection()
 			);
 		});
+		$this->registerAlias('OCP\Files\IMimeTypeLoader', 'MimeTypeLoader');
 		$this->registerService('NotificationManager', function () {
 			return new Manager();
 		});
