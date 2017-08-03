@@ -56,7 +56,7 @@ class Groups{
 	/**
 	 * for cross-domain request checks
 	 *
-	 * @return result
+	 * @return OC_OCS_Result
 	 */
 	public function options() {
 		// for cross-domain request checks
@@ -65,7 +65,7 @@ class Groups{
 		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
 		header("Access-Control-Allow-Credentials: true");
 
-		return new Result(null, 100);
+		return new OC_OCS_Result(null, 100);
 	}
 
 	/**
@@ -197,7 +197,7 @@ class Groups{
 	 */
 	public function getSubAdminsOfGroup($parameters) {
 		$this->setCorsHeaders();
-		
+
 		$group = $parameters['groupid'];
 		// Check group exists
 		$targetGroup = $this->groupManager->get($group);

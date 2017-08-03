@@ -43,7 +43,7 @@ class Apps {
 	/**
 	 * for cross-domain request checks
 	 *
-	 * @return result
+	 * @return OC_OCS_Result
 	 */
 	public function options() {
 		// for cross-domain request checks
@@ -52,7 +52,7 @@ class Apps {
 		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
 		header("Access-Control-Allow-Credentials: true");
 
-		return new Result(null, 100);
+		return new OC_OCS_Result(null, 100);
 	}
 
 	/**
@@ -132,7 +132,7 @@ class Apps {
 	 */
 	public function disable($parameters) {
 		$this->setCorsHeaders();
-		
+
 		$app = $parameters['appid'];
 		$this->appManager->disableApp($app);
 		return new OC_OCS_Result(null, 100);
