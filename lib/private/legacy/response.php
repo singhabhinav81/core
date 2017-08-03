@@ -104,10 +104,6 @@ class OC_Response {
 				break;
 		}
 		header($protocol.' '.$status);
-		header("Access-Control-Allow-Origin: *");
-		header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
-		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
-		header("Access-Control-Allow-Credentials: true");
 	}
 
 	/**
@@ -269,6 +265,26 @@ class OC_Response {
 			header('X-Robots-Tag: none'); // https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag
 			header('X-Download-Options: noopen'); // https://msdn.microsoft.com/en-us/library/jj542450(v=vs.85).aspx
 			header('X-Permitted-Cross-Domain-Policies: none'); // https://www.adobe.com/devnet/adobe-media-server/articles/cross-domain-xml-for-streaming.html
+		}
+	}
+
+	/**
+	 * This function adds some security related headers to all requests served via base.php
+	 * The implementation of this function has to happen here to ensure that all third-party
+	 * components (e.g. SabreDAV) also benefit from this headers.
+	 */
+	public static function setCorsHeaders($userId, $domain) {
+		if (\OC::$server->getAppManager()->isEnabledForUser('cors')) {
+			$allowedDomains = explode(",", \OC::$server->getConfig()->getUserValue($userId, 'cors', 'domains'));
+
+			if (in_array($domain, $allowedDomains)) {
+				header("Access-Control-Allow-Origin: " . $domain);
+				header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
+				header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
+				header("Access-Control-Allow-Credentials: true");
+			} else {
+				throw new Exception("Domain: " . $domain . " isn't a white-listed domain", 1);
+			}
 		}
 	}
 

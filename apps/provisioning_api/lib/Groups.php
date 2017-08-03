@@ -54,12 +54,39 @@ class Groups{
 	}
 
 	/**
+	 * for cross-domain request checks
+	 *
+	 * @return result
+	 */
+	public function options() {
+		// for cross-domain request checks
+		header("Access-Control-Allow-Origin: *");
+		header("Access-Control-Allow-Headers: authorization, OCS-APIREQUEST, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
+		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
+		header("Access-Control-Allow-Credentials: true");
+
+		return new Result(null, 100);
+	}
+
+	/**
+	 * for cross-domain response headers
+	 */
+	private function setCorsHeaders() {
+		// Set CORS response Headers if allowed
+		$requesterDomain = $_SERVER['HTTP_ORIGIN'];
+		$userId = $this->userSession->getUser()->getUID();
+		\OC_Response::setCorsHeaders($userId, $requesterDomain);
+	}
+
+	/**
 	 * returns a list of groups
 	 *
 	 * @param array $parameters
 	 * @return OC_OCS_Result
 	 */
 	public function getGroups($parameters) {
+		$this->setCorsHeaders();
+
 		$search = $this->request->getParam('search', '');
 		$limit = $this->request->getParam('limit');
 		$offset = $this->request->getParam('offset');
@@ -87,6 +114,8 @@ class Groups{
 	 * @return OC_OCS_Result
 	 */
 	public function getGroup($parameters) {
+		$this->setCorsHeaders();
+
 		// Check if user is logged in
 		$user = $this->userSession->getUser();
 		if ($user === null) {
@@ -128,6 +157,8 @@ class Groups{
 	 * @return OC_OCS_Result
 	 */
 	public function addGroup($parameters) {
+		$this->setCorsHeaders();
+
 		// Validate name
 		$groupId = $this->request->getParam('groupid', '');
 		if(empty($groupId)){
@@ -147,6 +178,8 @@ class Groups{
 	 * @return OC_OCS_Result
 	 */
 	public function deleteGroup($parameters) {
+		$this->setCorsHeaders();
+
 		// Check it exists
 		if(!$this->groupManager->groupExists($parameters['groupid'])){
 			return new OC_OCS_Result(null, 101);
@@ -163,6 +196,8 @@ class Groups{
 	 * @return OC_OCS_Result
 	 */
 	public function getSubAdminsOfGroup($parameters) {
+		$this->setCorsHeaders();
+		
 		$group = $parameters['groupid'];
 		// Check group exists
 		$targetGroup = $this->groupManager->get($group);

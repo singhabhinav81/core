@@ -88,16 +88,22 @@ class Users {
 	}
 
 	/**
+	 * for cross-domain response headers
+	 */
+	private function setCorsHeaders() {
+		// Set CORS response Headers if allowed
+		$requesterDomain = $_SERVER['HTTP_ORIGIN'];
+		$userId = $this->userSession->getUser()->getUID();
+		\OC_Response::setCorsHeaders($userId, $requesterDomain);
+	}
+
+	/**
 	 * returns a list of users
 	 *
 	 * @return Result
 	 */
 	public function getUsers() {
-		// for cross-domain request checks
-		header("Access-Control-Allow-Origin: *");
-		header("Access-Control-Allow-Headers: authorization, OCS-APIREQUEST, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
-		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
-		header("Access-Control-Allow-Credentials: true");
+		$this->setCorsHeaders();
 
 		$search = !empty($_GET['search']) ? $_GET['search'] : '';
 		$limit = !empty($_GET['limit']) ? $_GET['limit'] : null;
@@ -144,6 +150,8 @@ class Users {
 	 * @return Result
 	 */
 	public function addUser() {
+		$this->setCorsHeaders();
+
 		$userId = isset($_POST['userid']) ? $_POST['userid'] : null;
 		$password = isset($_POST['password']) ? $_POST['password'] : null;
 		$groups = isset($_POST['groups']) ? $_POST['groups'] : null;
@@ -203,6 +211,8 @@ class Users {
 	 * @return Result
 	 */
 	public function getUser($parameters) {
+		$this->setCorsHeaders();
+
 		$userId = $parameters['userid'];
 
 		// Check if user is logged in
@@ -247,6 +257,8 @@ class Users {
 	 * @return Result
 	 */
 	public function editUser($parameters) {
+		$this->setCorsHeaders();
+
 		/** @var string $targetUserId */
 		$targetUserId = $parameters['userid'];
 
@@ -350,6 +362,8 @@ class Users {
 	 * @return Result
 	 */
 	public function deleteUser($parameters) {
+		$this->setCorsHeaders();
+
 		// Check if user is logged in
 		$currentLoggedInUser = $this->userSession->getUser();
 		if ($currentLoggedInUser === null) {
@@ -381,6 +395,8 @@ class Users {
 	 * @return Result
 	 */
 	public function disableUser($parameters) {
+		$this->setCorsHeaders();
+
 		return $this->setEnabled($parameters, false);
 	}
 
@@ -389,6 +405,8 @@ class Users {
 	 * @return Result
 	 */
 	public function enableUser($parameters) {
+		$this->setCorsHeaders();
+
 		return $this->setEnabled($parameters, true);
 	}
 
@@ -425,6 +443,8 @@ class Users {
 	 * @return Result
 	 */
 	public function getUsersGroups($parameters) {
+		$this->setCorsHeaders();
+
 		// Check if user is logged in
 		$loggedInUser = $this->userSession->getUser();
 		if ($loggedInUser === null) {
@@ -490,6 +510,8 @@ class Users {
 	 * @return Result
 	 */
 	public function addToGroup($parameters) {
+		$this->setCorsHeaders();
+
 		// Check if user is logged in
 		$user = $this->userSession->getUser();
 		if ($user === null) {
@@ -526,6 +548,8 @@ class Users {
 	 * @return Result
 	 */
 	public function removeFromGroup($parameters) {
+		$this->setCorsHeaders();
+
 		// Check if user is logged in
 		$loggedInUser = $this->userSession->getUser();
 		if ($loggedInUser === null) {
@@ -582,6 +606,8 @@ class Users {
 	 * @return Result
 	 */
 	public function addSubAdmin($parameters) {
+		$this->setCorsHeaders();
+
 		$group = $this->groupManager->get($_POST['groupid']);
 		$user = $this->userManager->get($parameters['userid']);
 
@@ -619,6 +645,8 @@ class Users {
 	 * @return Result
 	 */
 	public function removeSubAdmin($parameters) {
+		$this->setCorsHeaders();
+
 		$group = $this->groupManager->get($parameters['_delete']['groupid']);
 		$user = $this->userManager->get($parameters['userid']);
 		$subAdminManager = $this->groupManager->getSubAdmin();
@@ -651,6 +679,8 @@ class Users {
 	 * @return Result
 	 */
 	public function getUserSubAdminGroups($parameters) {
+		$this->setCorsHeaders();
+		
 		$user = $this->userManager->get($parameters['userid']);
 		// Check if the user exists
 		if($user === null) {
