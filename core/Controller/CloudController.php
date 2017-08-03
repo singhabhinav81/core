@@ -34,16 +34,39 @@ class CloudController extends OCSController {
 	}
 
 	/**
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 *
+	 * @return array
+	 */
+	public function options() {
+		// for cross-domain request checks
+		header("Access-Control-Allow-Origin: *");
+		header("Access-Control-Allow-Headers: authorization, OCS-APIREQUEST, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
+		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
+		header("Access-Control-Allow-Credentials: true");
+
+		return ['data' => ''];
+	}
+
+	/**
+	 * for cross-domain response headers
+	 */
+	private function setCorsHeaders() {
+		// Set CORS response Headers if allowed
+		$requesterDomain = $_SERVER['HTTP_ORIGIN'];
+		$userId = \OC::$server->getUserSession()->getUser()->getUID();
+		\OC_Response::setCorsHeaders($userId, $requesterDomain);
+	}
+
+	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
 	 * @return array
 	 */
 	public function getCapabilities() {
-		header("Access-Control-Allow-Origin: *");
-		header("Access-Control-Allow-Headers: authorization, OCS-APIREQUEST, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
-		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
-		header("Access-Control-Allow-Credentials: true");
+		$this->setCorsHeaders();
 
 		$result = [];
 		list($major, $minor, $micro) = \OCP\Util::getVersion();
@@ -61,26 +84,14 @@ class CloudController extends OCSController {
 	}
 
 	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 */
-	public function options() {
-		// for cross-domain request checks
-		header("Access-Control-Allow-Origin: *");
-		header("Access-Control-Allow-Headers: authorization, OCS-APIREQUEST, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
-		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
-		header("Access-Control-Allow-Credentials: true");
-
-		return ['data' => ''];
-	}
-
-	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
 	 * @return array
 	 */
 	public function getCurrentUser() {
+		$this->setCorsHeaders();
+
 		$userObject = \OC::$server->getUserManager()->get(\OC_User::getUser());
 		$data  = [
 			'id' => $userObject->getUID(),
