@@ -41,21 +41,6 @@ class Apps {
 	}
 
 	/**
-	 * for cross-domain request checks
-	 *
-	 * @return OC_OCS_Result
-	 */
-	public function options() {
-		// for cross-domain request checks
-		header("Access-Control-Allow-Origin: *");
-		header("Access-Control-Allow-Headers: authorization, OCS-APIREQUEST, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
-		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
-		header("Access-Control-Allow-Credentials: true");
-
-		return new OC_OCS_Result(null, 100);
-	}
-
-	/**
 	 * for cross-domain response headers
 	 */
 	private function setCorsHeaders() {

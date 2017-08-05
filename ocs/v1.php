@@ -60,6 +60,15 @@ try {
 	// force language as given in the http request
 	\OC::$server->getL10NFactory()->setLanguageFromRequest();
 
+	if (\OC::$server->getRequest()->getMethod() === "OPTIONS") {
+		OC_API::respond(new Result(null, 100));
+		header("Access-Control-Allow-Origin: *");
+		header("Access-Control-Allow-Headers: authorization, OCS-APIREQUEST, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
+		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
+		header("Access-Control-Allow-Credentials: true");
+		return;
+	}
+
 	OC::$server->getRouter()->match('/ocs'.\OC::$server->getRequest()->getRawPathInfo());
 	return;
 } catch (ResourceNotFoundException $e) {
@@ -81,6 +90,16 @@ try {
 		OC::handleLogin(\OC::$server->getRequest());
 	}
 
+	if (\OC::$server->getRequest()->getMethod() === "OPTIONS") {
+		OC_API::respond(new Result(null, 100));
+		header("Access-Control-Allow-Origin: *");
+		header("Access-Control-Allow-Headers: authorization, OCS-APIREQUEST, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
+		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
+		header("Access-Control-Allow-Credentials: true");
+		return;
+	}
+
+
 	OC::$server->getRouter()->match('/ocsapp'.\OC::$server->getRequest()->getRawPathInfo());
 } catch (LoginException $e) {
 	OC_API::respond(new Result(null, \OCP\API::RESPOND_UNAUTHORISED, 'Unauthorised'), OC_API::requestedFormat());
@@ -93,4 +112,3 @@ try {
 } catch (Exception $ex) {
 	OC_API::respond($ex->getResult(), OC_API::requestedFormat());
 }
-

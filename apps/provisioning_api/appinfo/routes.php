@@ -40,12 +40,6 @@ $users = new Users(
 	\OC::$server->getLogger(),
 	\OC::$server->getTwoFactorAuthManager()
 );
-API::register('options', '/cloud/users', [$users, 'options'], 'provisioning_api', API::GUEST_AUTH);
-API::register('options', '/cloud/users/{userid}', [$users, 'options'], 'provisioning_api', API::GUEST_AUTH);
-API::register('options', '/cloud/users/{userid}/enable', [$users, 'options'], 'provisioning_api', API::GUEST_AUTH);
-API::register('options', '/cloud/users/{userid}/disable', [$users, 'options'], 'provisioning_api', API::GUEST_AUTH);
-API::register('options', '/cloud/users/{userid}/groups', [$users, 'options'], 'provisioning_api', API::GUEST_AUTH);
-API::register('options', '/cloud/users/{userid}/subadmins', [$users, 'options'], 'provisioning_api', API::GUEST_AUTH);
 
 API::register('get', '/cloud/users', [$users, 'getUsers'], 'provisioning_api', API::SUBADMIN_AUTH);
 API::register('post', '/cloud/users', [$users, 'addUser'], 'provisioning_api', API::SUBADMIN_AUTH);
@@ -67,9 +61,6 @@ $groups = new Groups(
 	\OC::$server->getUserSession(),
 	\OC::$server->getRequest()
 );
-API::register('options', '/cloud/groups', [$groups, 'options'], 'provisioning_api', API::GUEST_AUTH);
-API::register('options', '/cloud/groups/{groupid}', [$groups, 'options'], 'provisioning_api', API::GUEST_AUTH);
-API::register('options', '/cloud/groups/{groupid}/subadmins', [$groups, 'options'], 'provisioning_api', API::GUEST_AUTH);
 
 API::register('get', '/cloud/groups', [$groups, 'getGroups'], 'provisioning_api', API::SUBADMIN_AUTH);
 API::register('post', '/cloud/groups', [$groups, 'addGroup'], 'provisioning_api', API::SUBADMIN_AUTH);
@@ -79,8 +70,6 @@ API::register('get', '/cloud/groups/{groupid}/subadmins', [$groups, 'getSubAdmin
 
 // Apps
 $apps = new Apps(\OC::$server->getAppManager());
-API::register('options', '/cloud/apps', [$apps, 'options'], 'provisioning_api', API::GUEST_AUTH);
-API::register('options', '/cloud/apps/{appid}', [$apps, 'options'], 'provisioning_api', API::GUEST_AUTH);
 
 API::register('get', '/cloud/apps', [$apps, 'getApps'], 'provisioning_api', API::ADMIN_AUTH);
 API::register('get', '/cloud/apps/{appid}', [$apps, 'getAppInfo'], 'provisioning_api', API::ADMIN_AUTH);
