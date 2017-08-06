@@ -282,8 +282,6 @@ class OC_Response {
 				header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
 				header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
 				header("Access-Control-Allow-Credentials: true");
-			} else {
-				throw new Exception("Domain: " . $domain . " isn't a white-listed domain", 1);
 			}
 		}
 	}
