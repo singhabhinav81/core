@@ -41,22 +41,10 @@ class Apps {
 	}
 
 	/**
-	 * for cross-domain response headers
-	 */
-	private function setCorsHeaders() {
-		// Set CORS response Headers if allowed
-		$requesterDomain = $_SERVER['HTTP_ORIGIN'];
-		$userId = \OC::$server->getUserSession()->getUser()->getUID();
-		\OC_Response::setCorsHeaders($userId, $requesterDomain);
-	}
-
-	/**
 	 * @param array $parameters
 	 * @return OC_OCS_Result
 	 */
 	public function getApps($parameters) {
-		$this->setCorsHeaders();
-
 		$apps = OC_App::listAllApps(false, true);
 		$list = [];
 		foreach($apps as $app) {
@@ -88,8 +76,6 @@ class Apps {
 	 * @return OC_OCS_Result
 	 */
 	public function getAppInfo($parameters) {
-		$this->setCorsHeaders();
-
 		$app = $parameters['appid'];
 		$info = \OCP\App::getAppInfo($app);
 		if(!is_null($info)) {
@@ -104,8 +90,6 @@ class Apps {
 	 * @return OC_OCS_Result
 	 */
 	public function enable($parameters) {
-		$this->setCorsHeaders();
-
 		$app = $parameters['appid'];
 		$this->appManager->enableApp($app);
 		return new OC_OCS_Result(null, 100);
@@ -116,8 +100,6 @@ class Apps {
 	 * @return OC_OCS_Result
 	 */
 	public function disable($parameters) {
-		$this->setCorsHeaders();
-
 		$app = $parameters['appid'];
 		$this->appManager->disableApp($app);
 		return new OC_OCS_Result(null, 100);

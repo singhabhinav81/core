@@ -119,7 +119,7 @@ class OC_API {
 	public static function register($method, $url, $action, $app,
 				$authLevel = API::USER_AUTH,
 				$defaults = [],
-				$requirements = []) {
+				$requirements = [], $cors) {
 		$name = strtolower($method).$url;
 		$name = str_replace(['/', '{', '}'], '_', $name);
 		if(!isset(self::$actions[$name])) {
@@ -133,7 +133,7 @@ class OC_API {
 			self::$actions[$name] = [];
 			OC::$server->getRouter()->useCollection($oldCollection);
 		}
-		self::$actions[$name][] = ['app' => $app, 'action' => $action, 'authlevel' => $authLevel];
+		self::$actions[$name][] = ['app' => $app, 'action' => $action, 'authlevel' => $authLevel, 'cors' => $cors];
 	}
 
 	/**
@@ -179,6 +179,13 @@ class OC_API {
 			];
 		}
 		$response = self::mergeResponses($responses);
+
+		if (self::$actions[$name][0]['cors']) {
+			$requesterDomain = $_SERVER['HTTP_ORIGIN'];
+			$userId = \OC::$server->getUserSession()->getUser()->getUID();
+			\OC_Response::setCorsHeaders($userId, $requesterDomain);
+		}
+
 		$format = self::requestedFormat();
 		if (self::$logoutRequired) {
 			\OC::$server->getUserSession()->logout();
