@@ -118,10 +118,13 @@ class CORSMiddleware extends Middleware {
 		if(isset($this->request->server['HTTP_ORIGIN']) &&
 			$this->reflector->hasAnnotation('CORS')) {
 
-			// Magic of "cors" app
-			$requesterDomain = $this->request->server['HTTP_ORIGIN'];
-			$userId = $this->request->server['PHP_AUTH_USER'];
-			\OC_Response::setCorsHeaders($userId, $requesterDomain);
+			if (\OC::$server->getAppManager()->isEnabledForUser('cors')) {
+				// Magic of "cors" app
+				$requesterDomain = $this->request->server['HTTP_ORIGIN'];
+				$userId = $this->request->server['PHP_AUTH_USER'];
+				\OC_Response::setCorsHeaders($userId, $requesterDomain);
+				return;
+			}
 
 			// allow credentials headers must not be true or CSRF is possible
 			// otherwise

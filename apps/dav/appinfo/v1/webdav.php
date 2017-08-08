@@ -62,11 +62,6 @@ $requesterDomain = \OC::$server->getRequest()->server['HTTP_ORIGIN'];
 $userId = \OC::$server->getRequest()->server['PHP_AUTH_USER'];
 \OC_Response::setCorsHeaders($userId, $requesterDomain);
 
-// header("Access-Control-Allow-Origin: *");
-// header("Access-Control-Allow-Headers: authorization, OCS-APIREQUEST, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
-// header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
-// header("Access-Control-Allow-Credentials: true");
-
 $server = $serverFactory->createServer($baseuri, $requestUri, $authBackend, function() {
 	// use the view for the logged in user
 	return \OC\Files\Filesystem::getView();

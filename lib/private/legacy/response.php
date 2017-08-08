@@ -276,7 +276,6 @@ class OC_Response {
 	public static function setCorsHeaders($userId, $domain) {
 		if (\OC::$server->getAppManager()->isEnabledForUser('cors')) {
 			$allowedDomains = explode(",", \OC::$server->getConfig()->getUserValue($userId, 'cors', 'domains'));
-
 			if (in_array($domain, $allowedDomains)) {
 				header("Access-Control-Allow-Origin: " . $domain);
 				header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
