@@ -55,10 +55,6 @@ if (\OC::$server->getRequest()->getMethod() === "OPTIONS") {
 	return;
 }
 
-$requesterDomain = \OC::$server->getRequest()->server['HTTP_ORIGIN'];
-$userId = \OC::$server->getRequest()->server['PHP_AUTH_USER'];
-\OC_Response::setCorsHeaders($userId, $requesterDomain);
-
 $server = $serverFactory->createServer($baseuri, $requestUri, $authBackend, function() {
 	// use the view for the logged in user
 	return \OC\Files\Filesystem::getView();

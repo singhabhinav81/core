@@ -115,6 +115,7 @@ class OC_API {
 	 * @param int $authLevel the level of authentication required for the call
 	 * @param array $defaults
 	 * @param array $requirements
+	 * @param boolean $cors whether to enable cors for this route
 	 */
 	public static function register($method, $url, $action, $app,
 				$authLevel = API::USER_AUTH,

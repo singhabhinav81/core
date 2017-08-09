@@ -60,12 +60,6 @@ try {
 	// force language as given in the http request
 	\OC::$server->getL10NFactory()->setLanguageFromRequest();
 
-	if (\OC::$server->getRequest()->getMethod() === "OPTIONS") {
-		\OC_Response::setOptionsRequestHeaders();
-		OC_API::respond(new Result(null, 100));
-		return;
-	}
-
 	OC::$server->getRouter()->match('/ocs'.\OC::$server->getRequest()->getRawPathInfo());
 	return;
 } catch (ResourceNotFoundException $e) {
@@ -86,14 +80,6 @@ try {
 	if(!\OC::$server->getUserSession()->isLoggedIn()) {
 		OC::handleLogin(\OC::$server->getRequest());
 	}
-
-	if (\OC::$server->getRequest()->getMethod() === "OPTIONS") {
-		OC_API::respond(new Result(null, 100));
-		\OC_Response::setOptionsRequestHeaders();
-		return;
-	}
-
-
 	OC::$server->getRouter()->match('/ocsapp'.\OC::$server->getRequest()->getRawPathInfo());
 } catch (LoginException $e) {
 	OC_API::respond(new Result(null, \OCP\API::RESPOND_UNAUTHORISED, 'Unauthorised'), OC_API::requestedFormat());

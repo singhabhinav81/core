@@ -81,6 +81,7 @@ class Server {
 		$config = \OC::$server->getConfig();
 		$this->server->addPlugin(new MaintenancePlugin($config));
 		$this->server->addPlugin(new BlockLegacyClientPlugin($config));
+		$this->server->addPlugin(new CorsPlugin());
 		$authPlugin = new Plugin();
 		$authPlugin->addBackend(new PublicAuth());
 		$this->server->addPlugin($authPlugin);
