@@ -51,10 +51,7 @@ $authBackend = new \OCA\DAV\Connector\Sabre\Auth(
 $requestUri = \OC::$server->getRequest()->getRequestUri();
 
 if (\OC::$server->getRequest()->getMethod() === "OPTIONS") {
-	header("Access-Control-Allow-Origin: *");
-	header("Access-Control-Allow-Headers: authorization, OCS-APIREQUEST, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
-	header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
-	header("Access-Control-Allow-Credentials: true");
+	\OC_Response::setOptionsRequestHeaders();
 	return;
 }
 

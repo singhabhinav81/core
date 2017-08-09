@@ -61,11 +61,8 @@ try {
 	\OC::$server->getL10NFactory()->setLanguageFromRequest();
 
 	if (\OC::$server->getRequest()->getMethod() === "OPTIONS") {
+		\OC_Response::setOptionsRequestHeaders();
 		OC_API::respond(new Result(null, 100));
-		header("Access-Control-Allow-Origin: *");
-		header("Access-Control-Allow-Headers: authorization, OCS-APIREQUEST, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
-		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
-		header("Access-Control-Allow-Credentials: true");
 		return;
 	}
 
@@ -92,10 +89,7 @@ try {
 
 	if (\OC::$server->getRequest()->getMethod() === "OPTIONS") {
 		OC_API::respond(new Result(null, 100));
-		header("Access-Control-Allow-Origin: *");
-		header("Access-Control-Allow-Headers: authorization, OCS-APIREQUEST, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
-		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
-		header("Access-Control-Allow-Credentials: true");
+		\OC_Response::setOptionsRequestHeaders();
 		return;
 	}
 

@@ -269,9 +269,7 @@ class OC_Response {
 	}
 
 	/**
-	 * This function adds some security related headers to all requests served via base.php
-	 * The implementation of this function has to happen here to ensure that all third-party
-	 * components (e.g. SabreDAV) also benefit from this headers.
+	 * This function adds the CORS headers if the requester domain is white-listed
 	 */
 	public static function setCorsHeaders($userId, $domain) {
 		if (\OC::$server->getAppManager()->isEnabledForUser('cors')) {
@@ -280,9 +278,17 @@ class OC_Response {
 				header("Access-Control-Allow-Origin: " . $domain);
 				header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
 				header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
-				header("Access-Control-Allow-Credentials: true");
 			}
 		}
+	}
+
+	/**
+	 * This function adds the CORS headers for all domains
+	 */
+	public static function setOptionsRequestHeaders() {
+		header("Access-Control-Allow-Origin: *");
+		header("Access-Control-Allow-Headers: authorization, OCS-APIREQUEST, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
+		header("Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT, DELETE, MKCOL, PROPFIND");
 	}
 
 }
