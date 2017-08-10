@@ -50,4 +50,15 @@ interface IStorageFactory {
 	 * @since 8.0.0
 	 */
 	public function getInstance(IMountPoint $mountPoint, $class, $arguments);
+
+	/**
+	 * Wrap the given storage
+	 *
+	 * @param \OCP\Files\Mount\IMountPoint $mountPoint
+	 * @param \OCP\Files\Storage $storage
+	 * @return \OCP\Files\Storage
+	 *
+	 * @since 10.0.3
+	 */
+	public function wrap(IMountPoint $mountPoint, $storage);
 }
