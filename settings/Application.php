@@ -34,6 +34,7 @@ namespace OC\Settings;
 use OC\Files\View;
 use OC\Server;
 use OC\AppFramework\Utility\TimeFactory;
+use OC\Settings\Controller\CorsController;
 use OC\Settings\Controller\SettingsPageController;
 use OC\Settings\Controller\AppSettingsController;
 use OC\Settings\Controller\AuthSettingsController;
@@ -74,6 +75,16 @@ class Application extends App {
 		/**
 		 * Controllers
 		 */
+		 $container->registerService('CorsController', function(IContainer $c) {
+		    return new CorsController(
+				$c->query('AppName'),
+				$c->query('Request'),
+				$c->query('UserId'),
+				$c->query('Logger'),
+				$c->query('ServerContainer')->getURLGenerator(),
+				$c->query('Config')
+		    );
+		 });
 		 $container->registerService('SettingsPageController', function(IContainer $c) {
  			return new SettingsPageController(
  				$c->query('AppName'),
