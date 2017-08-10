@@ -50,11 +50,6 @@ $authBackend = new \OCA\DAV\Connector\Sabre\Auth(
 );
 $requestUri = \OC::$server->getRequest()->getRequestUri();
 
-if (\OC::$server->getRequest()->getMethod() === "OPTIONS") {
-	\OC_Response::setOptionsRequestHeaders();
-	return;
-}
-
 $server = $serverFactory->createServer($baseuri, $requestUri, $authBackend, function() {
 	// use the view for the logged in user
 	return \OC\Files\Filesystem::getView();

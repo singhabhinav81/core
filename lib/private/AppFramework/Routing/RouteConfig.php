@@ -84,7 +84,7 @@ class RouteConfig {
 	private function processOCS(array $routes) {
 		if (\OC::$server->getRequest()->getMethod() === "OPTIONS") {
 			\OC_Response::setOptionsRequestHeaders();
-			OC_API::respond(new Result(null, 100));
+			\OC_API::respond(new Result(null, 100));
 			return;
 		}
 

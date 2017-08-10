@@ -1,6 +1,6 @@
 <?php
 /**
- * @author Piotr Mrowczynski <piotr@owncloud.com>
+ * @author Noveen Sachdeva <noveen.sachdeva@research.iiit.ac.in>
  *
  * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
@@ -21,13 +21,13 @@
 
 namespace OCA\DAV\Connector\Sabre;
 
-use Sabre\DAV\Exception\ServiceUnavailable;
-use Sabre\DAV\ServerPlugin;
+use Sabre\HTTP\ResponseInterface;
+use Sabre\HTTP\RequestInterface;
 
 /**
  * Class CorsPlugin is a plugin which adds CORS headers to the responses
  */
-class CorsPlugin extends ServerPlugin {
+class CorsPlugin extends \Sabre\DAV\ServerPlugin {
 
 	/**
 	 * Reference to main server object
@@ -35,12 +35,6 @@ class CorsPlugin extends ServerPlugin {
 	 * @var \Sabre\DAV\Server
 	 */
 	private $server;
-
-	/**
-	 * This plugin ensures that all request have CORS enabled
-	 */
-	public function __construct() {
-	}
 
 	/**
 	 * This initializes the plugin.
@@ -56,15 +50,32 @@ class CorsPlugin extends ServerPlugin {
 	public function initialize(\Sabre\DAV\Server $server) {
 		$this->server = $server;
 		$this->server->on('beforeMethod', [$this, 'setCorsHeaders'], 100);
+		$this->server->on('beforeMethod:OPTIONS', [$this, 'setOptionsRequestHeaders'], 5);
 	}
 
 	/**
-	 * This method is called before any HTTP method and returns http status code 503
-	 * in case the request is incorrect
+	 * This method sets the cors headers for all requests
+	 *
+	 * @return void
 	 */
 	public function setCorsHeaders() {
 		$requesterDomain = \OC::$server->getRequest()->server['HTTP_ORIGIN'];
  		$userId = \OC::$server->getRequest()->server['PHP_AUTH_USER'];
  		\OC_Response::setCorsHeaders($userId, $requesterDomain);
+	}
+
+	/**
+	 * Handles the OPTIONS request
+	 *
+	 * @param RequestInterface $request
+	 * @param ResponseInterface $response
+	 *
+	 * @return false
+	 */
+	public function setOptionsRequestHeaders(RequestInterface $request, ResponseInterface $response) {
+		\OC_Response::setOptionsRequestHeaders();
+		$response->setStatus(200);
+
+		return false;
 	}
 }
